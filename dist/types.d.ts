@@ -1,7 +1,7 @@
 type Currency = 'NGN' |  'USD' ;
 type PaymentChannels = 'bank' | 'card' ;
 type Bearer = 0 | 1;
-type phone = number | string;
+type customerPhoneNumber = number | string;
 interface CredoCustomFields {
     display_name: string;
     variable_name: string;
@@ -18,22 +18,16 @@ export interface CredoProps {
     publicKey: string;
     email: string;
     amount: number;
-    firstname?: string;
-    lastname?: string;
-    phone?: phone;
+    customerFirstName?: string;
+    customerLastName?: string;
+    customerPhoneNumber?: customerPhoneNumber;
     reference?: string;
+    narration?: string;
+    serviceCode?: string;
     metadata?: CredoMetadata;
     currency?: Currency;
     channels?: PaymentChannels[];
-    label?: string;
-    plan?: string;
-    quantity?: number;
-    subaccount?: string;
-    transaction_charge?: number;
     bearer?: Bearer;
-    'data-custom-button'?: string;
-    split_code?: string;
-    split?: Record<string, any>;
 }
 export type InitializePayment = (options: {
     onSuccess?: callback;

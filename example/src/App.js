@@ -8,22 +8,12 @@ const config = {
   email: 'user@example.com',
   amount: 20000,
   publicKey: '0PUB0305E7ST33VIRmseXtZn6F45TPg1',
-  firstname: 'cool',
-  lastname: 'story',
-  /*split: { //if you want to use transaction split
-        "type": "percentage",
-        "bearer_type": "all",
-        "subaccounts": [
-            {
-                "subaccount": "ACCT_mtl3xzwjfhcldkw",
-                "share": 30
-            },
-            {
-                "subaccount": "ACCT_y19ht107y44o294",
-                "share": 20
-            }
-        ]
-    }*/
+  customerFirstName: 'Test',
+  customerLastName: 'Test',
+    narration: 'This is a test transaction',
+    bearer: 0
+
+
 };
 
 const onSuccess = (reference) => {

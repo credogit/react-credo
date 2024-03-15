@@ -108,30 +108,24 @@ function useCredoPayment(hookConfig) {
             throw new Error('Unable to load credo inline script');
         }
         var args = __assign(__assign({}, hookConfig), config);
-        var publicKey = args.publicKey, firstname = args.firstname, lastname = args.lastname, phone = args.phone, email = args.email, amount = args.amount, reference = args.reference, _b = args.metadata, metadata = _b === void 0 ? {} : _b, _c = args.currency, currency = _c === void 0 ? 'NGN' : _c, channels = args.channels, _d = args.label, label = _d === void 0 ? '' : _d, _e = args.plan, plan = _e === void 0 ? '' : _e, _f = args.quantity, quantity = _f === void 0 ? '' : _f, _g = args.subaccount, subaccount = _g === void 0 ? '' : _g, _h = args.transaction_charge, transaction_charge = _h === void 0 ? 0 : _h, _j = args.bearer, bearer = _j === void 0 ? 1 : _j, split = args.split, split_code = args.split_code;
+        var publicKey = args.publicKey, customerFirstName = args.customerFirstName, customerLastName = args.customerLastName, customerPhoneNumber = args.customerPhoneNumber, email = args.email, amount = args.amount, reference = args.reference, narration = args.narration, serviceCode = args.serviceCode, _b = args.metadata, metadata = _b === void 0 ? {} : _b, _c = args.currency, currency = _c === void 0 ? 'NGN' : _c, channels = args.channels,  _j = args.bearer, bearer = _j === void 0 ? 1 : _j;
         if (scriptLoaded) {
             var credoArgs = {
                 callBack: onSuccess ? onSuccess : function () { return null; },
                 onClose: onClose ? onClose : function () { return null; },
                 key: publicKey,
-                ref: reference,
+                reference: reference,
                 email: email,
-                firstname: firstname,
-                lastname: lastname,
-                phone: phone,
+                customerFirstName: customerFirstName,
+                customerLastName: customerLastName,
+                customerPhoneNumber: customerPhoneNumber,
                 amount: amount,
                 currency: currency,
-                plan: plan,
-                quantity: quantity,
                 channels: channels,
-                subaccount: subaccount,
-                transaction_charge: transaction_charge,
                 bearer: bearer,
-                label: label,
                 metadata: metadata,
-                split: split,
-                split_code: split_code,
-                'data-custom-button': args['data-custom-button'] || '',
+                narration: narration,
+                serviceCode: serviceCode,
             };
             callCredoPop(credoArgs);
         }

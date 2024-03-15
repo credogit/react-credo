@@ -4,7 +4,7 @@ This is a react library for implementing credo payment gateway
 
 ## Demo
 
-![Demo](React_App_01.png?raw=true "Demo Image")
+![Demo](img.png?raw=true "Demo Image")
 
 ## Get Started
 
@@ -43,7 +43,8 @@ Note that all 3 implementations produce the same results.
       reference: (new Date()).getTime().toString(),
       email: "user@example.com",
       amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-      publicKey: 'pk_test_dsdfghuytfd2345678gvxxxxxxxxxx',
+      publicKey: '0PUB0305E7ST33VIRmseXtZn6F45TPg1',
+      narration: 'Test transaction',
   };
   
   // you can call this function anything
@@ -107,7 +108,8 @@ Note that all 3 implementations produce the same results.
     reference: (new Date()).getTime().toString(),
     email: "user@example.com",
     amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-    publicKey: 'pk_test_dsdfghuytfd2345678gvxxxxxxxxxx',
+    publicKey: '0PUB0305E7ST33VIRmseXtZn6F45TPg1',
+    'narration': 'Test transaction',
   };
   
   function App() {
@@ -165,7 +167,8 @@ import './App.css';
       reference: (new Date()).getTime().toString(),
       email: "user@example.com",
       amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-      publicKey: 'pk_test_dsdfghuytfd2345678gvxxxxxxxxxx',
+      publicKey: '0PUB0305E7ST33VIRmseXtZn6F45TPg1',
+      narration: 'Test transaction',
   };
   
   // you can call this function anything
@@ -233,7 +236,7 @@ If you want to send extra metadata e.g. Transaction description, user that made 
     };
 ```
 
-Please checkout [Credo Documentation](https://developers.credo.co/docs/credo-inline) for other available options you can add to the tag
+Please checkout [Credo Documentation](https://docs.credocentral.com/) for other available options you can add to the tag
 
 ## Deployment
 
