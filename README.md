@@ -4,7 +4,7 @@ This is a react library for implementing credo payment gateway
 
 ## Demo
 
-![Demo](img.png?raw=true "Demo Image")
+![Demo](https://github.com/credogit/react-credo/blob/master/img.png?raw=true "Demo Image")
 
 ## Get Started
 
