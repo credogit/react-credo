@@ -1,70 +1,261 @@
-# Getting Started with Create React App
+# react-credo
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a react library for implementing credo payment gateway
 
-## Available Scripts
+## Demo
 
-In the project directory, you can run:
+![Demo](React_App_01.png?raw=true "Demo Image")
 
-### `npm start`
+## Get Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+This React library provides a wrapper to add Credo Payments to your React application
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Install
 
-### `npm test`
+```sh
+npm install react-credo --save
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+or with `yarn`
 
-### `npm run build`
+```sh
+yarn add react-credo
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Usage
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This library can be implemented into any react application in 3 different ways:
+1. By using hooks provided by the library
+2. By using a button provided by the library
+3. By using a context consumer provided by the library
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Note that all 3 implementations produce the same results.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 1. Using the credo hook
+```javascript
+  import React from 'react';
+  import logo from './logo.svg';
+  import { useCredoPayment } from 'react-credo';
+  import './App.css';
+  
+  const config = {
+      reference: (new Date()).getTime().toString(),
+      email: "user@example.com",
+      amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+      publicKey: 'pk_test_dsdfghuytfd2345678gvxxxxxxxxxx',
+  };
+  
+  // you can call this function anything
+  const onSuccess = (reference) => {
+    // Implementation for whatever you want to do with reference and after success call.
+    console.log(reference);
+  };
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  // you can call this function anything
+  const onClose = () => {
+    // implementation for  whatever you want to do when the Credo dialog closed.
+    console.log('closed')
+  }
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+  const CredoHookExample = () => {
+      const initializePayment = useCredoPayment(config);
+      return (
+        <div>
+            <button onClick={() => {
+                initializePayment(onSuccess, onClose)
+            }}>Credo Hooks Implementation</button>
+        </div>
+      );
+  };
+  
+  function App() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>
+            Edit <code>src/App.js</code> and save to reload.
+          </p>
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
+        </header>
+        <CredoHookExample />
+      </div>
+    );
+  }
+  
+  export default App;
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+### 2. Using the credo button
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+``` javascript 
+  import React from 'react';
+  import logo from './logo.svg';
+  import { CredoButton } from 'react-credo';
+  import './App.css';
+  
+  const config = {
+    reference: (new Date()).getTime().toString(),
+    email: "user@example.com",
+    amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+    publicKey: 'pk_test_dsdfghuytfd2345678gvxxxxxxxxxx',
+  };
+  
+  function App() {
+    // you can call this function anything
+    const handleCredoSuccessAction = (reference) => {
+      // Implementation for whatever you want to do with reference and after success call.
+      console.log(reference);
+    };
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    // you can call this function anything
+    const handleCredoCloseAction = () => {
+      // implementation for  whatever you want to do when the Credo dialog closed.
+      console.log('closed')
+    }
 
-### Code Splitting
+    const componentProps = {
+        ...config,
+        text: 'Credo Button Implementation',
+        onSuccess: (reference) => handleCredoSuccessAction(reference),
+        onClose: handleCredoCloseAction,
+    };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    return (
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>
+            Edit <code>src/App.js</code> and save to reload.
+          </p>
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
+        </header>
+        <CredoButton {...componentProps} />
+      </div>
+    );
+  }
+  
+  export default App;
+```
 
-### Analyzing the Bundle Size
+### 3. using the Credo consumer
+``` Javascript
+import React from 'react';
+import logo from './logo.svg';
+import { CredoConsumer } from 'react-credo';
+import './App.css';
+  
+  const config = {
+      reference: (new Date()).getTime().toString(),
+      email: "user@example.com",
+      amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+      publicKey: 'pk_test_dsdfghuytfd2345678gvxxxxxxxxxx',
+  };
+  
+  // you can call this function anything
+  const handleSuccess = (reference) => {
+    // Implementation for whatever you want to do with reference and after success call.
+    console.log(reference);
+  };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+  // you can call this function anything
+  const handleClose = () => {
+    // implementation for  whatever you want to do when the Credo dialog closed.
+    console.log('closed')
+  }
 
-### Making a Progressive Web App
+  function App() {
+      const componentProps = {
+          ...config,
+          text: 'Credo Button Implementation',
+          onSuccess: (reference) => handleSuccess(reference),
+          onClose: handleClose
+      };
+  
+    return (
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>
+            Edit <code>src/App.js</code> and save to reload.
+          </p>
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
+        </header>
+        <CredoConsumer {...componentProps} >
+          {({initializePayment}) => <button onClick={() => initializePayment(handleSuccess, handleClose)}>Credo Consumer Implementation</button>}
+        </CredoConsumer>
+      </div>
+    );
+  }
+  
+  export default App;
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Sending Metadata with Transaction
+If you want to send extra metadata e.g. Transaction description, user that made the transaction. Edit your config like so:
 
-### Advanced Configuration
+```ts
+    const config = {
+       // Your required fields
+          metadata: {
+            custom_fields: [
+                {
+                    display_name: 'description',
+                    variable_name: 'description',
+                    value: 'Funding Wallet'
+                }
+                // To pass extra metadata, add an object with the same fields as above
+            ]
+        }
+    };
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Please checkout [Credo Documentation](https://developers.credo.co/docs/credo-inline) for other available options you can add to the tag
 
-### Deployment
+## Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+REMEMBER TO CHANGE THE KEY WHEN DEPLOYING ON A LIVE/PRODUCTION SYSTEM
 
-### `npm run build` fails to minify
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Fork it!
+2. Create your feature branch: `git checkout -b feature-name`
+3. Commit your changes: `git commit -am 'Some commit message'`
+4. Push to the branch: `git push origin feature-name`
+5. Submit a pull request 😉😉
+
+## How can I thank you?
+
+Why not star the github repo? I'd love the attention! Why not share the link for this repository on Twitter or Any Social Media? Spread the word!
+
+
+
+Thanks! 
+Lanre Yusuf.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

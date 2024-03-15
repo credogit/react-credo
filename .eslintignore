@@ -58,7 +58,9 @@ typings/
 .env
 .idea
 .DS_Store
-.code
 
-yarn.lock
+dist/
 
+.docz/
+
+/example
