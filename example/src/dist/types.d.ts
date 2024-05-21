@@ -1,37 +1,30 @@
-type Currency = 'NGN' |  'USD' ;
-type PaymentChannels = 'bank' | 'card' ;
-type Bearer = 0 | 1;
-type customerPhoneNumber = number | string;
-interface CredoCustomFields {
-    display_name: string;
+export type CustomField = {
     variable_name: string;
-    value: any;
-}
-interface CredoMetadata {
-    custom_fields: CredoCustomFields[];
-}
-interface CredoMetadata {
-    [key: string]: any;
-}
-export type callback = (response?: any) => void;
-export interface CredoProps {
-    publicKey: string;
-    email: string;
-    amount: number;
+    value: string;
+    display_name: string;
+};
+export type Metadata = {
+    bankAccount: string;
+    customFields: CustomField[];
+};
+export type PaymentProps = {
+    key?: string;
+    amount?: number;
+    email?: string;
+    onClose: () => void;
+    callBack: () => void;
+    currency?: string;
+    channels?: string[];
+    reference?: string;
+    metadata?: Metadata;
+    callbackUrl?: string;
+    serviceCode?: string;
     customerFirstName?: string;
     customerLastName?: string;
-    customerPhoneNumber?: customerPhoneNumber;
-    reference?: string;
-    narration?: string;
-    serviceCode?: string;
-    metadata?: CredoMetadata;
-    currency?: Currency;
-    channels?: PaymentChannels[];
-    bearer?: Bearer;
-}
-export type InitializePayment = (options: {
-    onSuccess?: callback;
-    onClose?: callback;
-    config?: CredoProps;
-}) => void;
+    customerPhoneNumber?: string;
+    bearer?: 0 | 1;
+    paymentLink?: string;
+    initializeAccount?: 0 | 1;
+};
+export type InitializePayment = (config?: PaymentProps) => void;
 export {};

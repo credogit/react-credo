@@ -1,13 +1,15 @@
+// noinspection JSUnresolvedReference
+
 import {useState, useEffect} from 'react';
 
-const cachedScripts: string[] = [];
 interface IScriptResult {
   loaded: boolean;
   error: boolean;
 }
 
 export default function useCredoScript(): boolean[] {
-  const src = 'https://js.credo.co/v1/inline.js';
+
+  const src = 'https://pay.credocentral.com/inline.js';
 
   const [state, setState] = useState<IScriptResult>({
     loaded: false,
@@ -15,17 +17,20 @@ export default function useCredoScript(): boolean[] {
   });
 
   useEffect((): any => {
-    if (cachedScripts.includes(src)) {
+
+    // @ts-ignore
+    if (document.getElementById("credo-inline")) {
       setState({
         loaded: true,
         error: false,
       });
     } else {
-      cachedScripts.push(src);
 
+      // @ts-ignore
       const script = document.createElement('script');
       script.src = src;
       script.async = true;
+      script.id = 'credo-inline'
 
       const onScriptLoad = (): void => {
         setState({
@@ -35,10 +40,7 @@ export default function useCredoScript(): boolean[] {
       };
 
       const onScriptError = (): void => {
-        const index = cachedScripts.indexOf(src);
-        if (index >= 0) cachedScripts.splice(index, 1);
         script.remove();
-
         setState({
           loaded: true,
           error: true,
@@ -49,6 +51,7 @@ export default function useCredoScript(): boolean[] {
       script.addEventListener('complete', onScriptLoad);
       script.addEventListener('error', onScriptError);
 
+      // @ts-ignore
       document.body.appendChild(script);
 
       return (): void => {
@@ -56,7 +59,7 @@ export default function useCredoScript(): boolean[] {
         script.removeEventListener('error', onScriptError);
       };
     }
-  }, [src]);
+  }, [src, setState]);
 
   return [state.loaded, state.error];
 }

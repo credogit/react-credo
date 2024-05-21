@@ -59,7 +59,7 @@ typings/
 .idea
 .DS_Store
 
-dist/
+example/src/dist/
 
 .docz/
 
