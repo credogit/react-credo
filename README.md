@@ -4,7 +4,8 @@ This is a react library for implementing credo payment gateway
 
 ## Demo
 
-![Demo](https://github.com/credogit/react-credo/blob/master/img.png?raw=true "Demo Image")
+![Demo](https://github.com/credogit/react-credo/assets/22002332/632b7856-ad49-41b2-a8d7-64013651bd96)
+
 
 ## Get Started
 
@@ -35,205 +36,73 @@ Note that all 3 implementations produce the same results.
 ### 1. Using the credo hook
 ```javascript
   import React from 'react';
-  import logo from './logo.svg';
   import { useCredoPayment } from 'react-credo';
   import './App.css';
   
-  const config = {
-      reference: (new Date()).getTime().toString(),
-      email: "user@example.com",
-      amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-      publicKey: '0PUB0305E7ST33VIRmseXtZn6F45TPg1',
-      narration: 'Test transaction',
-  };
+  function generateRandomAlphanumeric(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        result += chars[randomIndex];
+    }
+    return result;
+  }
+  const transRef = generateRandomAlphanumeric(20);
   
-  // you can call this function anything
-  const onSuccess = (reference) => {
-    // Implementation for whatever you want to do with reference and after success call.
-    console.log(reference);
+  const config = {
+      key: '0PUB0024x8k5w4TU1dq570Jb8zJn0dLH', //You should store your API key as an environment variable
+      customerFirstName: 'Ciroma',
+      customerLastName: 'Chukwuma',
+      email: 'ciroma.chukwuma@example.com',
+      amount: 109000,
+      currency: 'NGN',
+      bearer: 0,
+      reference: transRef, // Please generate your own transRef that is unique for each transaction
+      customerPhoneNumber: '2348032698425',
+      callbackUrl: 'https://merchant-test-line.netlify.app/successful',
+      metadata: {
+          customFields: [
+              {"variable_name": "gender", "value": "Male", "display_name": "Gender" },
+              {"variable_name": "address", "value": "27/29 Adeyemo Alakija street, VI", "display_name": "Address" }
+          ]
+      },
+      onClose: () => {
+          console.log('Widget Closed')
+      },
+      callBack: (response) => {
+          console.log('Successful Payment')
+          console.log(response)
+          window.location.href = response.callbackUrl
+      }
   };
 
-  // you can call this function anything
-  const onClose = () => {
-    // implementation for  whatever you want to do when the Credo dialog closed.
-    console.log('closed')
-  }
 
   const CredoHookExample = () => {
       const initializePayment = useCredoPayment(config);
       return (
-        <div>
-            <button onClick={() => {
-                initializePayment(onSuccess, onClose)
-            }}>Credo Hooks Implementation</button>
-        </div>
+          <div>
+              <button onClick={() => {
+                  initializePayment();
+              }}>
+                  Credo Hooks Implementation
+              </button>
+          </div>
       );
   };
   
-  function App() {
+function App() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-        <CredoHookExample />
-      </div>
+        <div className="App">
+            <header className="App-header">
+                <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer"> Learn React </a>
+            </header>
+            <CredoHookExample/>
+        </div>
     );
-  }
-  
-  export default App;
-```
+}
 
-
-### 2. Using the credo button
-
-``` javascript 
-  import React from 'react';
-  import logo from './logo.svg';
-  import { CredoButton } from 'react-credo';
-  import './App.css';
-  
-  const config = {
-    reference: (new Date()).getTime().toString(),
-    email: "user@example.com",
-    amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-    publicKey: '0PUB0305E7ST33VIRmseXtZn6F45TPg1',
-    'narration': 'Test transaction',
-  };
-  
-  function App() {
-    // you can call this function anything
-    const handleCredoSuccessAction = (reference) => {
-      // Implementation for whatever you want to do with reference and after success call.
-      console.log(reference);
-    };
-
-    // you can call this function anything
-    const handleCredoCloseAction = () => {
-      // implementation for  whatever you want to do when the Credo dialog closed.
-      console.log('closed')
-    }
-
-    const componentProps = {
-        ...config,
-        text: 'Credo Button Implementation',
-        onSuccess: (reference) => handleCredoSuccessAction(reference),
-        onClose: handleCredoCloseAction,
-    };
-
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-        <CredoButton {...componentProps} />
-      </div>
-    );
-  }
-  
-  export default App;
-```
-
-### 3. using the Credo consumer
-``` Javascript
-import React from 'react';
-import logo from './logo.svg';
-import { CredoConsumer } from 'react-credo';
-import './App.css';
-  
-  const config = {
-      reference: (new Date()).getTime().toString(),
-      email: "user@example.com",
-      amount: 20000, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
-      publicKey: '0PUB0305E7ST33VIRmseXtZn6F45TPg1',
-      narration: 'Test transaction',
-  };
-  
-  // you can call this function anything
-  const handleSuccess = (reference) => {
-    // Implementation for whatever you want to do with reference and after success call.
-    console.log(reference);
-  };
-
-  // you can call this function anything
-  const handleClose = () => {
-    // implementation for  whatever you want to do when the Credo dialog closed.
-    console.log('closed')
-  }
-
-  function App() {
-      const componentProps = {
-          ...config,
-          text: 'Credo Button Implementation',
-          onSuccess: (reference) => handleSuccess(reference),
-          onClose: handleClose
-      };
-  
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-        <CredoConsumer {...componentProps} >
-          {({initializePayment}) => <button onClick={() => initializePayment(handleSuccess, handleClose)}>Credo Consumer Implementation</button>}
-        </CredoConsumer>
-      </div>
-    );
-  }
-  
-  export default App;
-```
-
-### Sending Metadata with Transaction
-If you want to send extra metadata e.g. Transaction description, user that made the transaction. Edit your config like so:
-
-```ts
-    const config = {
-       // Your required fields
-          metadata: {
-            custom_fields: [
-                {
-                    display_name: 'Gender',
-                    variable_name: 'gender',
-                    value: 'Male'
-                }
-                // To pass extra metadata, add an object with the same fields as above
-            ]
-        }
-    };
+export default App;
 ```
 
 Please checkout [Credo Documentation](https://docs.credocentral.com/) for other available options you can add to the tag
@@ -255,9 +124,7 @@ REMEMBER TO CHANGE THE KEY WHEN DEPLOYING ON A LIVE/PRODUCTION SYSTEM
 Why not star the github repo? I'd love the attention! Why not share the link for this repository on Twitter or Any Social Media? Spread the word!
 
 
-
-Thanks! 
-Lanre Yusuf.
+Credocentral.
 
 ## License
 
