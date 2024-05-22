@@ -1,6 +1,6 @@
 {
   "name": "react-credo",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "This is a reactJS library for implementing credo payment gateway",
   "main": "example/src/dist/index.js",
   "module": "example/src/dist/index.es.js",

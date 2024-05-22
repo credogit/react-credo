@@ -25,13 +25,7 @@ yarn add react-credo
 
 ### Usage
 
-This library can be implemented into any react application in 3 different ways:
-1. By using hooks provided by the library
-2. By using a button provided by the library
-3. By using a context consumer provided by the library
-
-Note that all 3 implementations produce the same results.
-
+This library can be implemented into any react application by using hooks provided by the library
 
 ### 1. Using the credo hook
 ```javascript
