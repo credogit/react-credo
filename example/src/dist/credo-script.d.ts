@@ -1,1 +1,1 @@
-export default function useCredoScript(): boolean[];
+export default function useCredoScript(src?: string): [boolean, boolean];

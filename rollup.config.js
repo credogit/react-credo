@@ -26,7 +26,7 @@ export default {
     external(),
     resolve(),
     typescript({
-      rollupCommonJSResolveHack: true,
+      // rollupCommonJSResolveHack: true,
       clean: true,
     }),
     commonjs(),

@@ -4,20 +4,20 @@ export type CustomField = {
     display_name: string;
 };
 export type Metadata = {
-    bankAccount: string;
+    [key: string]: string | CustomField[];
     customFields: CustomField[];
 };
 export type PaymentProps = {
-    key?: string;
-    amount?: number;
-    email?: string;
+    key: string;
+    amount: number;
+    email: string;
     onClose: () => void;
     callBack: () => void;
     currency?: string;
     channels?: string[];
     reference?: string;
     metadata?: Metadata;
-    callbackUrl?: string;
+    callbackUrl: string;
     serviceCode?: string;
     customerFirstName?: string;
     customerLastName?: string;

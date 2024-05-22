@@ -2,67 +2,52 @@
 
 var react = require('react');
 
-// noinspection JSUnresolvedReference
-function useCredoScript() {
-    var src = 'https://pay.credocentral.com/inline.js';
-    var _a = react.useState({
-        loaded: false,
-        error: false,
-    }), state = _a[0], setState = _a[1];
+function useCredoScript(src) {
+    if (src === void 0) { src = 'https://pay.credocentral.com/inline.js'; }
+    var _a = react.useState({ loaded: false, error: false }), state = _a[0], setState = _a[1];
     react.useEffect(function () {
-        // @ts-ignore
-        if (document.getElementById("credo-inline")) {
-            setState({
-                loaded: true,
-                error: false,
-            });
+        if (document.getElementById('credo-inline')) {
+            setState({ loaded: true, error: false });
+            return;
         }
-        else {
-            // @ts-ignore
-            var script_1 = document.createElement('script');
-            script_1.src = src;
-            script_1.async = true;
-            script_1.id = 'credo-inline';
-            var onScriptLoad_1 = function () {
-                setState({
-                    loaded: true,
-                    error: false,
-                });
-            };
-            var onScriptError_1 = function () {
-                script_1.remove();
-                setState({
-                    loaded: true,
-                    error: true,
-                });
-            };
-            script_1.addEventListener('load', onScriptLoad_1);
-            script_1.addEventListener('complete', onScriptLoad_1);
-            script_1.addEventListener('error', onScriptError_1);
-            // @ts-ignore
-            document.body.appendChild(script_1);
-            return function () {
-                script_1.removeEventListener('load', onScriptLoad_1);
-                script_1.removeEventListener('error', onScriptError_1);
-            };
-        }
-    }, [src, setState]);
+        var script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.id = 'credo-inline';
+        var onScriptLoad = function () { return setState({ loaded: true, error: false }); };
+        var onScriptError = function () {
+            script.remove();
+            setState({ loaded: true, error: true });
+        };
+        script.addEventListener('load', onScriptLoad);
+        script.addEventListener('error', onScriptError);
+        document.body.appendChild(script);
+        return function () {
+            script.removeEventListener('load', onScriptLoad);
+            script.removeEventListener('error', onScriptError);
+        };
+    }, [src]);
     return [state.loaded, state.error];
 }
 
 function useCredoPayment(config) {
     var _a = useCredoScript(), scriptLoaded = _a[0], scriptError = _a[1];
-    function initializePayment() {
+    var initializePayment = react.useCallback(function () {
         if (scriptError) {
             throw new Error('Unable to load credo inline script');
         }
         if (scriptLoaded) {
-            var handler = window.CredoWidget && window.CredoWidget.setup(config);
-            if (handler) {
-                handler.openIframe();
+            var CredoWidget = window.CredoWidget;
+            if (CredoWidget) {
+                var setup = CredoWidget.setup;
+                var handler = setup(config);
+                if (handler) {
+                    var openIframe = handler.openIframe;
+                    openIframe();
+                }
             }
         }
-    }
+    }, [scriptLoaded, scriptError, config]);
     react.useEffect(function () {
         if (scriptError) {
             throw new Error('Unable to load credo inline script');
