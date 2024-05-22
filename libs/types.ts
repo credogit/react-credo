@@ -1,4 +1,3 @@
-
 export type CustomField = {
   variable_name: string;
   value: string;
@@ -6,33 +5,30 @@ export type CustomField = {
 };
 
 export type Metadata = {
-  bankAccount: string;
+  [key: string]: string | CustomField[];
   customFields: CustomField[];
 };
 
 export type PaymentProps = {
+  key: string;
+  amount: number;
+  email: string;
+  onClose: () => void;
+  callBack: () => void;
+  currency?: string;
+  channels?: string[];
+  reference?: string;
+  metadata?: Metadata;
+  callbackUrl: string;
+  serviceCode?: string;
+  customerFirstName?: string;
+  customerLastName?: string;
+  customerPhoneNumber?: string;
+  bearer?: 0 | 1;
+  paymentLink?: string;
+  initializeAccount?: 0 | 1;
+};
 
-  key?: string
-  amount?: number
-  email?: string
-  onClose: () => void
-  callBack: () => void
-  currency?: string
-  channels?: string []
-  reference?: string
-  metadata?: Metadata
-  callbackUrl?: string
-  serviceCode?: string
-  customerFirstName?: string
-  customerLastName?: string
-  customerPhoneNumber?: string
-  bearer?: 0 | 1
-  paymentLink?: string
-  initializeAccount?: 0 | 1
-}
-
-export type InitializePayment = (
-  config?: PaymentProps
-) => void;
+export type InitializePayment = (config?: PaymentProps) => void;
 
 export {};
